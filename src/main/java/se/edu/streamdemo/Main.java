@@ -16,7 +16,8 @@ public class Main {
         ArrayList<Task> tasksData = dataManager.loadData();
 
         System.out.println("Printing all data ...");
-        printAllData(tasksData);
+//        printAllData(tasksData);
+//        printAllDataUsingStream(tasksData);
 
         System.out.println("Printing deadlines ...");
         printDeadlines(tasksData);
@@ -24,6 +25,7 @@ public class Main {
         printDeadlinesUsingStream(tasksData);
 
         System.out.println("Total number of deadlines: " + countDeadlines(tasksData));
+        System.out.println("Total number of deadlines (using streams): " + countDeadlinesUsingStream(tasksData));
 
         ArrayList<Task> filteredList = filterTaskListByString(tasksData, "11");
         System.out.println("Printing filtered list");
@@ -41,13 +43,34 @@ public class Main {
         return count;
     }
 
+    private boolean isDeadline(Task t) {
+        if (t instanceof Deadline) {
+            return true;
+        }
+        return false;
+    }
+
+    private static int countDeadlinesUsingStream(ArrayList<Task> tasks) {
+        int count = (int) tasks.stream()
+                .filter(t -> t instanceof Deadline)
+                .count();
+        return count;
+    }
+
     public static void printAllData(ArrayList<Task> tasksData) {
+        System.out.println("Printing using iteration...");
         for (Task t : tasksData) {
             System.out.println(t);
         }
     }
 
+    public static void printAllDataUsingStream(ArrayList<Task> tasks) {
+        System.out.println("Printing using streams...");
+        tasks.stream().forEach(System.out::println);
+    }
+
     public static void printDeadlines(ArrayList<Task> tasksData) {
+        System.out.println("Using iteration... ");
         for (Task t : tasksData) {
             if (t instanceof Deadline) {
                 System.out.println(t);
@@ -67,4 +90,11 @@ public class Main {
                 .collect(toList());
         return filteredList;
     }
+    public static void printDeadlinesUsingStream(ArrayList<Task> tasks) {
+        System.out.println("Using stream...");
+        tasks.stream()
+                .filter((t) -> t instanceof Deadline)
+                .forEach(System.out::println);
+    }
+
 }
